@@ -26,8 +26,7 @@ import java.util.List;
     @Override
     public Product saveProduct(int id, String name){
         Product product = new Product(id, name);
-        var res = productRepository.save(product);
-        return res;
+        return productRepository.existsById(id)? new Product(null,null):productRepository.save(product);
 
     }
 }

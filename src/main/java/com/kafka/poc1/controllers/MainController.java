@@ -1,6 +1,7 @@
 package com.kafka.poc1.controllers;
 
 import com.kafka.poc1.model.Product;
+import com.kafka.poc1.services.KafkaSender;
 import com.kafka.poc1.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,9 @@ public class MainController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private KafkaSender kafkaSender;
+
     @GetMapping("/product")
     Product findById(@RequestParam("pid") int id){
         var res = productService.findById(id);
@@ -23,6 +27,7 @@ public class MainController {
     @PostMapping("/product/create")
     Product createProduct(@RequestParam("pid")int id, @RequestParam("pname")String name){
         var res = productService.saveProduct(id,name);
+        System.out.println(kafkaSender.sendMessage(res));
         return res;
     }
 }
